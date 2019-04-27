@@ -1,7 +1,7 @@
 /**
  * Physics Experiment
- * Author: Your Name and Carolyn Yao
- * Does this compile or finish running within 5 seconds? Y/N
+ * Author: Nehal Patel and Carolyn Yao
+ * Does this compile or finish running within 5 seconds? Y
  */
 
 /**
@@ -15,6 +15,7 @@
  * You don't need to use the helper methods, but if they come in handy setting
  * up a custom test case, feel free to use them.
  */
+
 public class PhysicsExperiment {
 
   /**
@@ -37,9 +38,60 @@ public class PhysicsExperiment {
     // in the table in the right places based on the return description
     int[][] scheduleTable = new int[numStudents + 1][numSteps + 1];
 
-    // Your code goes here
+    int j = 0;
+  
+    while(j < numSteps){
+      //The default 'null' values
+      int maxStepCount = 0;
+      int studentId = 0;
+
+      //DFS on the student who can do most number of contiguous steps after step j
+      for(int i = 0; i <= numStudents; i++){
+        int contiguousSteps = numOfContiguousSteps(signUpTable, j, i, numSteps);
+
+        if(contiguousSteps > maxStepCount){
+          maxStepCount = contiguousSteps;
+          studentId = i;
+        }
+      }
+      //Check against 'disconnect' of experiment steps
+      if(maxStepCount == 0){
+        throw new Error("No student exists that can complete step " + j );
+      }
+
+      //Update the scheduleTable with the given student id
+      for(int c = j + 1; c <= j + maxStepCount; c++){
+        scheduleTable[studentId][c] = 1;
+      }
+
+      //Update j to our last executed step
+      j += maxStepCount;
+    }
 
     return scheduleTable;
+  }
+
+  /**
+   * From a given step, returns the number of contiguous that a student
+   * may perform following
+   * 
+   * @param signUpTable: The signup table
+   * @param stepNum: The given step we have finished (ie. the column number)
+   * @param studentNum: The student id (ie. The row number)
+   * @param totalNumOfSteps: The total number of steps (ie. n)
+   * 
+   * @return stepCount: Total number of contiguous steps the student can complete after stepNum
+   */
+
+  private int numOfContiguousSteps(int [][] signUpTable, int stepNum, int studentNum, int totalNumOfSteps){
+    int stepCount = 0;
+    int j = stepNum + 1;
+
+    while(j <= totalNumOfSteps && signUpTable[studentNum][j] == 1){
+      stepCount++;
+      j++;
+    }
+    return stepCount;
   }
 
   /**
