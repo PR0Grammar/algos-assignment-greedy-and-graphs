@@ -1,7 +1,7 @@
 /**
  * Public Transit
- * Author: Your Name and Carolyn Yao
- * Does this compile? Y/N
+ * Author: Nehal Patel and Carolyn Yao
+ * Does this compile? Y
  */
 
 /**
@@ -11,6 +11,12 @@
  * from the existing shortest-path algorithm.
  */
 public class FastestRoutePublicTransit {
+
+  //NOTE: 
+  //The function only calculates time AFTER arrival to station S.
+  //In other words, the cost to get to station S is 0 (not startTime).
+  //To include the startTime cost for the shortest time to T, just add
+  //startTime to the calculated shortest time to T from S.
 
   /**
    * The algorithm that could solve for shortest travel time from a station S
@@ -32,11 +38,71 @@ public class FastestRoutePublicTransit {
     int[][] first,
     int[][] freq
   ) {
-    // Your code along with comments here. Feel free to borrow code from any
-    // of the existing method. You can also make new helper methods.
-    return 0;
+    //Edge case check if no verticies provided or adj matrix dimension mismatch(not VxV)
+    if(lengths.length == 0 || lengths[0].length == 0 || lengths.length != lengths[0].length)
+      throw new Error("No verticies to process or dimension mismatch.");
+    
+    int numOfVerticies = lengths[0].length;
+
+    //NOTE: shortestTimes keeps track of shortest time AFTER arrival to S, not including startTime
+    int[] shortestTimes = new int[numOfVerticies];
+    Boolean[] checked = new Boolean[numOfVerticies];
+
+    for(int i = 0; i < numOfVerticies; i++){
+      shortestTimes[i] = Integer.MAX_VALUE;
+      checked[i] = false;
+    }
+    
+    shortestTimes[0] = 0;
+
+    //Use !checked[T] to terminate loop once we have checked the target station
+    for(int i = 0; i < numOfVerticies && !checked[T]; i++){
+      int u = findNextToProcess(shortestTimes, checked);
+
+      for(int v = 0; v < numOfVerticies; v++){
+        int lenEdge = lengths[u][v];
+
+        //Edge doesn't exist or v is already checked
+        if(lenEdge == Integer.MAX_VALUE || checked[v])
+          continue;
+        
+        //Used to calculate the next available train from u to v at the current shortest time
+        int currentTime = shortestTimes[u] + startTime;
+        int firstTrainAvail = first[u][v];
+        int frequency = freq[u][v];
+        int trainIndx = nextTrainIndex(currentTime, firstTrainAvail, frequency);
+
+        //Calculate the cost from u to v
+        int waitTime = firstTrainAvail + (trainIndx * frequency) - currentTime;
+        int minCostUToV = waitTime + lenEdge + shortestTimes[u];
+
+        //Update path from S to v if u to v has a shorter path
+        shortestTimes[v] = Math.min(shortestTimes[v], minCostUToV);
+      }
+
+      checked[u] = true;
+    }
+
+    return shortestTimes[T];
   }
 
+  /**
+   * Calculates the next available train(index). 
+   * 
+   * @param arrivalTime: time of arrival to station
+   * @param firstAvailTrain: Time of first train on that station
+   * @param freq: The frequency at which trains come to that station
+   * 
+   * @return The ceiling of ((arrivalTime - firstAvailTrain) / freq) if value is >= 0. If not,
+   *         will return 0 (indicating that the person arrived earlier than the firstAvailTrain time)
+   */
+
+  public int nextTrainIndex(int arrivalTime, int firstAvailTrain, int freq){
+    double nextTrain = (arrivalTime - firstAvailTrain) / ((double) freq);
+
+    return nextTrain <= 0 ? 0 : (int) Math.ceil(nextTrain);
+
+  }
   /**
    * Finds the vertex with the minimum time from the source that has not been
    * processed yet.
