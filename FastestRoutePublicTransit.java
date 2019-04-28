@@ -38,9 +38,9 @@ public class FastestRoutePublicTransit {
     int[][] first,
     int[][] freq
   ) {
-    //Edge case check if no verticies provided or adj matrix dimension mismatch(not VxV)
-    if(lengths.length == 0 || lengths[0].length == 0 || lengths.length != lengths[0].length)
-      throw new Error("No verticies to process or dimension mismatch.");
+    //Edge case check if no verticies provided or dimension mismatch on any matrix
+    if(!validDimensions(lengths, first, freq))
+      throw new Error("No verticies to process or dimension mismatch between lengths, freq and first.");
     
     int numOfVerticies = lengths[0].length;
 
@@ -84,6 +84,14 @@ public class FastestRoutePublicTransit {
     }
 
     return shortestTimes[T];
+  }
+
+  private boolean validDimensions(int[][] lengths, int[][] first, int[][] freq){
+    int n = lengths.length;
+
+    return n > 0 && lengths[0].length == n &&
+           first.length == n && first[0].length == n &&
+           freq.length == n && freq[0].length == n;
   }
 
   /**
@@ -191,5 +199,40 @@ public class FastestRoutePublicTransit {
     t.shortestTime(lengthTimeGraph, 0);
 
     // You can create a test case for your implemented method for extra credit below
+
+    System.out.println("#### TEST CASES USING myShortestTravelTime ####");
+    // NOTE: I used Infinity instead of 0 to represent no edge
+    int inf = Integer.MAX_VALUE;
+
+    /**
+     * TEST ONE:
+     * Very basic directed graph 0 -> 1 -> 2
+     * 
+     * With 0 as source 0 ~> 1 is 5, and 0 ~> 2 is 8
+     */
+
+    int lenTime1[][] = new int[][]{
+      {inf, 3, inf},
+      {inf, inf, 2},
+      {inf, inf, inf}
+    };
+
+    int firstTime1[][] = new int[][]{
+      {inf, 0, inf},
+      {inf, inf, 4},
+      {inf, inf, inf},
+    };
+
+    int freqTime1[][] = new int[][]{
+      {inf, 3, inf},
+      {inf, inf, 3},
+      {inf, inf, inf}
+    };
+
+    int startTime1 = 7;
+
+    System.out.println("(TEST ONE) cost from 0 ~> 1: " +  t.myShortestTravelTime(0, 1, startTime1, lenTime1, firstTime1, freqTime1));
+    System.out.println("(TEST ONE) cost from 0 ~> 2: " +  t.myShortestTravelTime(0, 2, startTime1, lenTime1, firstTime1, freqTime1));
+  
   }
 }
