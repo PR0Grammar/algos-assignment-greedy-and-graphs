@@ -82,7 +82,7 @@ public class FastestRoutePublicTransit {
 
       checked[u] = true;
     }
-
+    printShortestTimes(shortestTimes);
     return shortestTimes[T];
   }
 
@@ -231,8 +231,66 @@ public class FastestRoutePublicTransit {
 
     int startTime1 = 7;
 
+    //Should print 5
     System.out.println("(TEST ONE) cost from 0 ~> 1: " +  t.myShortestTravelTime(0, 1, startTime1, lenTime1, firstTime1, freqTime1));
+    
+    //Should print 8
     System.out.println("(TEST ONE) cost from 0 ~> 2: " +  t.myShortestTravelTime(0, 2, startTime1, lenTime1, firstTime1, freqTime1));
-  
+   
+    /**
+   * TEST TWO:
+   * More complex, look at test2.jpg file for drawing
+   * Should return 29
+   * Num of stations: 10
+   * Num of train routes: 12
+   * 
+   */
+
+   int lenTime2[][] = new int[][]{
+     {inf, 10, 12, 50, inf, inf, inf, inf, inf, inf},
+     {inf, inf, inf, inf, inf, 3, inf, inf, inf ,inf},
+     {inf, inf, inf, inf, 2, inf, inf, inf, inf, inf},
+     {inf, inf, inf, inf, inf, inf, inf, inf, 15, inf},
+     {inf, inf, inf, inf, inf, inf, inf, inf, 3, inf},
+     {inf, inf, inf, inf, 2, inf, 4, inf, inf, inf},
+     {inf, inf, inf, inf, inf, inf, inf, 2, inf, inf},
+     {inf, inf, inf, inf, inf, inf, inf, inf, inf, 4},
+     {inf, inf, inf, inf, inf, inf, inf, inf, inf, 4},
+     {inf, inf, inf, inf, inf, inf, inf, 2, inf, inf}
+    };
+
+   int firstTime2[][] = new int[][]{
+      {inf, 3, 0, 10, inf, inf, inf, inf, inf, inf},
+      {inf, inf, inf, inf, inf, 11, inf, inf, inf ,inf},
+      {inf, inf, inf, inf, 7, inf, inf, inf, inf, inf},
+      {inf, inf, inf, inf, inf, inf, inf, inf, 13, inf},
+      {inf, inf, inf, inf, inf, inf, inf, inf, 25, inf},
+      {inf, inf, inf, inf, 3, inf, 3, inf, inf, inf},
+      {inf, inf, inf, inf, inf, inf, inf, 7, inf, inf},
+      {inf, inf, inf, inf, inf, inf, inf, inf, inf, 9},
+      {inf, inf, inf, inf, inf, inf, inf, inf, inf, 13},
+      {inf, inf, inf, inf, inf, inf, inf, 17, inf, inf}
+    };
+
+    int freqTime2[][] = new int[][]{
+      {inf, 3, 2, 11, inf, inf, inf, inf, inf, inf},
+      {inf, inf, inf, inf, inf, 2, inf, inf, inf ,inf},
+      {inf, inf, inf, inf, 1, inf, inf, inf, inf, inf},
+      {inf, inf, inf, inf, inf, inf, inf, inf, 7, inf},
+      {inf, inf, inf, inf, inf, inf, inf, inf, 5, inf},
+      {inf, inf, inf, inf, 2, inf, 7, inf, inf, inf},
+      {inf, inf, inf, inf, inf, inf, inf, 2, inf, inf},
+      {inf, inf, inf, inf, inf, inf, inf, inf, inf, 4},
+      {inf, inf, inf, inf, inf, inf, inf, inf, inf, 8},
+      {inf, inf, inf, inf, inf, inf, inf, 3, inf, inf}
+    };
+
+    int startTime2 = 9;
+
+    //Should print 22
+    System.out.println("(TEST TWO) cost from 0 ~> 7: " +  t.myShortestTravelTime(0, 7, startTime2, lenTime2, firstTime2, freqTime2));
+    
+    //Should print 24
+    System.out.println("(TEST TWO) cost from 0 ~> 9: " +  t.myShortestTravelTime(0, 9, startTime2, lenTime2, firstTime2, freqTime2));
   }
 }
