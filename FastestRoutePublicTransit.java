@@ -239,7 +239,8 @@ public class FastestRoutePublicTransit {
    
     /**
    * TEST TWO:
-   * More complex, look at test2.jpg file for drawing
+   * More complex, drawing on writeup pdf
+   * 
    * Should return 29
    * Num of stations: 10
    * Num of train routes: 12
